@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+
+<input type="text" id="myInput" placeholder="اكتب شيء هنا" />
+<button onclick="askToSave()">حفظ</button>
+
+<script>
+  function saveData() {
+    const input = document.getElementById('myInput').value.trim();
+
+    if(input === "") {
+      Swal.fire('يرجى كتابة شيء للحفظ', '', 'warning');
+      return false; // لم نحفظ لأنه فارغ
+    }
+
+    try {
+      localStorage.setItem('mySavedData', input);
+      return true; // الحفظ تم بنجاح
+    } catch (e) {
+      console.error('Error saving to localStorage', e);
+      return false; // حدث خطأ أثناء الحفظ
+    }
+  }
+
+  function askToSave() {
+    debugger
+    Swal.fire({
+      title: "هل تريد حفظ التغييرات؟",
+      showDenyButton: true,
+      showCancelButton: true,
+      confirmButtonText: "حفظ",
+      denyButtonText: `عدم الحفظ`
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const success = saveData();
+        if(success) {
+          Swal.fire("تم الحفظ بنجاح!", "", "success");
+        } else {
+          Swal.fire("لم يتم الحفظ!", "", "error");
+        }
+      } else if (result.isDenied) {
+        Swal.fire("لم يتم حفظ التغييرات", "", "info");
+      }
+    });
+  }
+</script>
+
+</body>
+</html>
